@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spreadsheet View</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="./src/output.css">
+</head>
+<body>
+    <main class="main-content">
+        <div class="spreadsheet-container">
+            <div class="spreadsheet-toolbar">
+                <div class="toolbar-group">
+                    <button class="tool-btn active">Edit Mode</button>
+                    <div class="v-divider"></div>
+                    <button class="tool-btn icon-only" title="Filter">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 3H2l8 9v7l4 3v-10L22 3z"/></svg>
+                    </button>
+                    <button class="tool-btn icon-only" title="Sort">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5h10M11 9h7M11 13h4M3 17l3 3 3-3M6 18V4"/></svg>
+                    </button>
+                </div>
+                <div class="toolbar-group">
+                    <button class="export-btn">Export CSV</button>
+                    <button class="share-btn">Connect API</button>
+                </div>
+            </div>
+
+            <div class="grid-scroll-area">
+                <table class="data-grid">
+                    <thead>
+                        <tr>
+                            <th class="row-num-col"></th>
+                            <th>Entry ID</th>
+                            <th>Full Name</th>
+                            <th>Status</th>
+                            <th>Date Added</th>
+                            <th>Category</th>
+                            <th class="add-col">+</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="selected-row">
+                            <td class="row-num">1</td>
+                            <td class="selected-cell"><div class="cell-content">DB_9921</div></td>
+                            <td><div class="cell-content">John Doe</div></td>
+                            <td><div class="cell-content"><span class="badge active">Verified</span></div></td>
+                            <td><div class="cell-content">2026-03-13</div></td>
+                            <td><div class="cell-content">Technical</div></td>
+                            <td></td>
+                        </tr>
+                        <tr><td class="row-num">2</td><td><div class="cell-content">DB_9922</div></td><td><div class="cell-content">Jane Smith</div></td><td><div class="cell-content"><span class="badge active">Live</span></div></td><td><div class="cell-content">2026-03-12</div></td><td><div class="cell-content">Marketing</div></td><td></td></tr>
+                        <tr><td class="row-num">3</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                        <tr><td class="row-num">4</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

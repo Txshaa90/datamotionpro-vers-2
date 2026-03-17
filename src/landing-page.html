@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataMotionProV2</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="./src/output.css">
+</head>
+<body class="landing-page-body">
+    <div class="main min-h-screen">
+        <nav class="NavigationBar flex items-center justify-between backdrop-blur-sm fixed w-full top-0 z-50">
+            <div class="container mx-auto px-4 py-4 flex items-center">
+                    <div class="icon flex items-center gap-2 leading-none">
+                        <svg class="block" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>                    
+                        <a href="landing-page.html" class="logo">DataMotionProV2</a>
+                    </div>
+                    <div class="menu flex items-center">
+                        <ul>
+                            <li><a href="#features-section">Features</a></li>
+                            <li><a href="pricing-page.html">Pricing</a></li>
+                            <li><a href="">Documentation</a></li>
+                            <li><a href="">About</a></li>
+                        </ul>
+                    </div>
+                    <span class="BannerGrow"></span>
+                    <div class="SignInWrapper">
+                        <button type="button" role="link" class="SignIn" onclick="location.href='login-page.html';">Sign in</button>
+                    </div>
+                </div>
+        </nav>
+
+        <div class="content-wrapper">
+            <section class="upload-drop-box">
+                <div class="container">
+                    <h1 class="" style="font-size: 70px; padding: 20px;">
+                        Upload Any Spreadsheet
+                        <br>
+                        Convert Automatically into Database
+                    </h1>
+                    <p>
+                        Upload Excel, CSV, or JSON files and instantly convert them into
+                        <br>
+                        collaborative, API-powered databases. No code required.
+                    </p>
+                    <div class="upload-area-container">
+                        <label class="custom-upload-box">
+                            <div class="upload-content">
+                                <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                                </svg>
+                                <p class="upload-main-text">Click to upload or <span>drag and drop</span></p>
+                                <p class="upload-sub-text">Excel, CSV, or JSON (MAX. 10MB)</p>
+                            </div>
+                            <input type="file" class="hidden-input">
+                        </label>
+                    </div>
+                </div>
+            </section>
+
+            <section id="features-section" class="import-info">
+                <div class="container">
+                    <div class="content-text content-box">
+                        <h2 style="font-size: 40px;">How Import Works</h2>
+                        <p style="font-size: 20px;">Transforming your spreadsheet to a clean database in 3 steps</p>
+                    </div>
+                    <div class="grid">
+                        <div class="step-card">
+                            <h2>1. Upload your File</h2>
+                            <p>Drag and drop Excel, CSV, or JSON files. With support for complex templates with merged cells and multiple sheets.</p>
+                        </div>
+                        <div class="step-card">
+                            <h2>2. Auto-Convert Data</h2>
+                            <p>Our smart parser detects headers, skips section labels, validates data types, and filters out junk rows automatically.</p>
+                        </div>
+                        <div class="step-card">
+                            <h2>3. Work Immediately</h2>
+                            <p>Your converted data will appear in a collaborative spreadsheet interface, backed by a real database with instant APIs.</p>
+                        </div>
+                    </div>
+                    <div class="content-box content-box-border">
+                        <h2 style="color: #2563eb;">Equipped with Spreadsheet Capabilities</h2>
+                        <div class="grid-container">
+                            <div class="grid-item">
+                                <p>✔ Merged cells and section headers</p>
+                            </div>
+                            <div class="grid-item">
+                                <p>✔ Multiple sheets in one files</p>
+                            </div>
+                            <div class="grid-item">
+                                <p>✔ Date and number formatting</p>
+                            </div>
+                            <div class="grid-item">
+                                <p>✔ Cell colors and styling preserved</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="solve">
+                <div class="container-solve">
+                    <div class="content-text content-box">
+                        <h2 style="font-size: 40px;">Solve Business Problems</h2>
+                        <p>From inventory tracking to CRM - no coding required - maximize efficiency</p>
+                    </div>
+                    
+                    <div class="grid">
+                        <div class="step-card">
+                            <h2>Project Management</h2>
+                            <p>Track and manage tasks, deadlines, and team progress all in one place.</p>
+                            <ul>
+                                <li>Task tracking</li>
+                                <li>Timeline views</li>
+                                <li>Team collaboration</li>
+                            </ul>
+                        </div>
+                        <div class="step-card">
+                            <h2>CRM & Sales</h2>
+                            <p>Manage your customer relationships and sales pipelines effectively.</p>
+                            <ul>
+                                <li>Contact management</li>
+                                <li>Deal tracking</li>
+                                <li>Sales analytics</li>
+                            </ul>
+                        </div>
+                        <div class="step-card">
+                            <h2>Inventory Management</h2>
+                            <p>Keep track of things like your products, stock levels, and suppliers.</p>
+                            <ul>
+                                <li>Stock tracking</li>
+                                <li>Order management</li>
+                                <li>Supplier database</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="about-section">
+                <div class="about-container">
+                    <div class="about-title">
+                        <h2>About DataMotionProV2</h2>
+                        <p>Building the future of data management</p>
+                    </div>
+                    <div class="container flex-column">
+                        <h2>Our Mission</h2>
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, 
+                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+                        </p>
+                    </div>
+                    <div class="container flex-column">
+                        <h2>Why DataMotionProV2</h2>
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, 
+                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+                        </p>
+                        <ul>
+                            <li>No-code interface that anyone can use</li>
+                            <li>Real database power with relationships and validations</li>
+                            <li>Automatic API generation for your data</li>
+                            <li>Enterprise-grade security and scalability</li>
+                        </ul>
+                    </div>
+                    <div class="container flex-column">
+                        <h2>Built For Teams</h2>
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, 
+                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="ready-to-section">
+                <div class="ready-container">
+                    <div>
+                        <h2 style="font-size: 40px;">Ready to transform your spreadsheets?</h2>
+                    </div>
+                    <div class="import-anchor">
+                        <button type="button" role="link" class="import-button">Try DataMotionProV2</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <footer class="datamotionprov2-footer">
+            <div class="footer-grid">
+                <div class="footer-column brand-col">
+                    <h2>DataMotionProV2</h2>
+                </div>
+
+                <div class="footer-column">
+                    <h2>Product</h2>
+                    <ul>
+                        <li><a href="#features-section">Features</a></li>
+                        <li><a href="">Pricing</a></li>
+                        <li><a href="">Documentation</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h2>Company</h2>
+                    <ul>
+                        <li><a href="">About</a></li>
+                        <li><a href="">Blog</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h2>Legal</h2>
+                    <ul>
+                        <li><a href="">Privacy</a></li>
+                        <li><a href="">Terms</a></li>
+                        <li><a href="">Security</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="rights">
+                <span>© 2024 DataMotionProV2. All rights reserved.</span>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+    const navbar = document.querySelector('.NavigationBar');
+
+    window.onscroll = () => {
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    };
+    </script>
+
+</body>
+</html>

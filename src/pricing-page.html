@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="./src/output.css">
+</head>
+<body class="pricing-page-body">
+
+    <nav class="NavigationBar flex items-center justify-between backdrop-blur-sm fixed w-full top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex items-center">
+            <div class="icon flex items-center gap-2 leading-none">
+                <svg class="block" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>                    
+                <a href="landing-page.html" class="logo">DataMotionProV2</a>
+            </div>
+
+            <div class="menu flex items-center">
+                <ul>
+                    <li><a href="landing-page.html#features-section">Features</a></li>
+                    <li><a href="pricing-page.html">Pricing</a></li>
+                    <li><a href="">Documentation</a></li>
+                    <li><a href="">About</a></li>
+                </ul>
+            </div>
+            <span class="BannerGrow"></span>
+            <div class="SignInWrapper">
+                <button type="button" role="link" class="SignIn" onclick="location.href='login-page.html';">Sign in</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="pricing-wrapper">
+        <div class="pricing-header">
+            <h1>Plans for every stage of growth</h1>
+            <p>Start for free, upgrade as you scale your data.</p>
+            
+            <div class="toggle-container">
+                <span>Monthly</span>
+                <label class="switch">
+                    <input type="checkbox" id="billing-toggle">
+                    <span class="slider round"></span>
+                </label>
+                <span>Yearly <small class="save-tag">Save 20%</small></span>
+            </div>
+        </div>
+
+        <div class="pricing-grid">
+            <div class="price-card">
+                <h3>Starter</h3>
+                <div class="price">
+                    <span class="currency">$</span>
+                    <span class="amount" data-monthly="0" data-yearly="0">0</span>
+                    <span class="period">/mo</span>
+                </div>
+                <p class="card-desc">Perfect for side projects and learning.</p>
+                <ul class="features">
+                    <li>✔ 1,000 Rows per month</li>
+                    <li>✔ 3 Active Databases</li>
+                    <li>✔ Basic API access</li>
+                    <li>✔ Community Support</li>
+                </ul>
+                <button class="price-btn">Get Started</button>
+            </div>
+
+            <div class="price-card featured">
+                <span class="pop-tag">Most Popular</span>
+                <h3>Professional</h3>
+                <div class="price">
+                    <span class="currency">$</span>
+                    <span class="amount" data-monthly="29" data-yearly="24">29</span>
+                    <span class="period">/mo</span>
+                </div>
+                <p class="card-desc">For growing teams and scaling apps.</p>
+                <ul class="features">
+                    <li>✔ 50,000 Rows per month</li>
+                    <li>✔ Unlimited Databases</li>
+                    <li>✔ Priority API throughput</li>
+                    <li>✔ Email Support</li>
+                    <li>✔ Advanced Analytics</li>
+                </ul>
+                <button class="price-btn featured-btn">Go Pro</button>
+            </div>
+
+            <div class="price-card">
+                <h3>Enterprise</h3>
+                <div class="price">
+                    <span class="amount">Custom</span>
+                </div>
+                <p class="card-desc">Bespoke solutions for big data.</p>
+                <ul class="features">
+                    <li>✔ Unlimited Everything</li>
+                    <li>✔ Dedicated Account Manager</li>
+                    <li>✔ Custom Security (SAML)</li>
+                    <li>✔ 24/7 Phone Support</li>
+                </ul>
+                <button class="price-btn">Contact Sales</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="datamotionprov2-footer">
+        <div class="footer-grid">
+            <div class="footer-column brand-col">
+                <h2>DataMotionProV2</h2>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Product</h3>
+                <ul>
+                    <li><a href="landing-page.html#features-section">Features</a></li>
+                    <li><a href="pricing-page.html">Pricing</a></li>
+                    <li><a href="">Documentation</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h3>Company</h3>
+                <ul>
+                    <li><a href="">About</a></li>
+                    <li><a href="">Blog</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h3>Legal</h3>
+                <ul>
+                    <li><a href="">Privacy</a></li>
+                    <li><a href="">Terms</a></li>
+                    <li><a href="">Security</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="rights">
+            <span>© 2024 DataMotionProV2. All rights reserved.</span>
+        </div>
+    </footer>
+
+    <script>
+    const toggle = document.getElementById('billing-toggle');
+    const amounts = document.querySelectorAll('.amount');
+
+    toggle.addEventListener('change', () => {
+        amounts.forEach(span => {
+            const monthly = span.getAttribute('data-monthly');
+            const yearly = span.getAttribute('data-yearly');
+            
+            if (toggle.checked) {
+                // Show Yearly
+                span.textContent = yearly;
+            } else {
+                // Show Monthly
+                span.textContent = monthly;
+            }
+        });
+    });
+
+    const navbar = document.querySelector('.NavigationBar');
+
+    window.onscroll = () => {
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    };
+
+</script>
+</body>
+</html>
