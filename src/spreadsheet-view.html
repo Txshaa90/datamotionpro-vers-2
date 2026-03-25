@@ -7,56 +7,277 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="./src/output.css">
 </head>
-<body>
-    <main class="main-content">
-        <div class="spreadsheet-container">
-            <div class="spreadsheet-toolbar">
-                <div class="toolbar-group">
-                    <button class="tool-btn active">Edit Mode</button>
-                    <div class="v-divider"></div>
-                    <button class="tool-btn icon-only" title="Filter">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 3H2l8 9v7l4 3v-10L22 3z"/></svg>
-                    </button>
-                    <button class="tool-btn icon-only" title="Sort">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5h10M11 9h7M11 13h4M3 17l3 3 3-3M6 18V4"/></svg>
-                    </button>
+<body class="spreadsheet-view-body">
+    <div class="spreadsheet-layout">
+        <aside class="sidebar-spreadsheet">
+            <div class="sidebar-header">
+                <a href="dashboard.html" class="back-btn">←</a>
+                <span class="database-name">Inventory_2026</span>
+            </div>
+            
+            <nav class="sidebar-spreadsheet-nav">
+                <div class="nav-divider"></div>
+                
+
+                <div class="nav-label">Workspace</div>
+                    <a href="notifications.html" target="_blank" class="nav-item">Notifications</a>
+                    <a href="settings.html" target="_blank" class="nav-item">Settings</a>
+
+                    <div class="nav-divider"></div>
+
+                    <div class="nav-label">Tables</div>
+                    <div id="tablesContainer"> <div class="nav-item-wrapper">
+                            <a href="#" class="nav-item active" data-view="inventory">Main_Inventory</a>
+                            <button class="table-options-btn">⋮</button>
+                        </div>
+                        <div class="nav-item-wrapper">
+                            <a href="#" class="nav-item" data-view="suppliers">Suppliers_List</a>
+                            <button class="table-options-btn">⋮</button>
+                        </div>
+                    </div>
+
+                <button class="add-table-btn">+ Add New Table</button>
+
+                <div class="nav-label">Trash</div>
+                <div id="trashList" class="trash-container">
+                    <p class="empty-trash-msg">Trash is empty</p>
                 </div>
-                <div class="toolbar-group">
-                    <button class="export-btn">Export CSV</button>
-                    <button class="share-btn">Connect API</button>
+        
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="dropdown-wrapper"> <button class="user-pill" id="accountDropdownTrigger">
+                        <div class="avatar-sm">JD</div>
+                        <span>John Doe</span>
+                    </button>
+
+                    <div class="popup-menu up" id="accountDropdown">
+                        <a href="settings.html" class="dropdown-item">Settings</a>
+                        <hr>
+                        <a href="login-page.html" class="dropdown-item logout">Log out</a>
+                    </div>
                 </div>
             </div>
+        </aside>
 
-            <div class="grid-scroll-area">
-                <table class="data-grid">
+        <main class="main-content-spreadsheet">
+            <nav class="top-nav-spreadsheet" id="spreadsheetNav">
+                <div class="nav-left">
+                    <div class="table-title-group">
+                        <input type="text" value="Main_Inventory" class="table-name-input" id="tableNameInput">
+                        <span class="save-status">Saved</span>
+                        
+                        <div class="collaborator-stack">
+                            <div class="avatar-xs" style="background: #f59e0b;">AM</div>
+                            <div class="avatar-xs" style="background: #10b981;">TL</div>
+                            <div class="avatar-xs" style="background: #6366f1;">+2</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="spreadsheet-menu">
+                    <div class="action-group">
+                        <button class="icon-tool-btn" title="Undo">↺</button>
+                        <button class="icon-tool-btn" title="Redo">↻</button>
+                    </div>
+                    <div class="v-separator"></div>
+                    <div class="action-group">
+                        <button class="tool-btn">Search</button>
+                        <button class="tool-btn">Filter</button>
+                        <button class="tool-btn">Sort</button>
+                        <button class="tool-btn">Color</button>
+                        <button class="tool-btn">Select</button>
+                        <button class="tool-btn">Import</button>
+                        <button class="tool-btn">Download</button>
+                    </div>
+                    <div class="v-separator"></div>
+                    <button class="primary-tool-btn">Connect API</button>
+                </div>
+            </nav>
+
+            <section class="spreadsheet-grid-wrapper">
+                <table class="table-view">
                     <thead>
-                        <tr>
-                            <th class="row-num-col"></th>
-                            <th>Entry ID</th>
-                            <th>Full Name</th>
-                            <th>Status</th>
-                            <th>Date Added</th>
-                            <th>Category</th>
-                            <th class="add-col">+</th>
+                        <tr class="column-id">
+                            <th class="corner-header"></th> <th class="column-header">A</th>
+                            <th class="column-header">B</th>
+                            <th class="column-header">C</th>
+                            <th class="column-header">D</th>
+                            <th class="column-header">E</th>
+                            <th class="column-header">F</th>
+                            <th class="column-header">G</th>
+                            <th class="column-header">H</th>
+                            <th class="column-header">I</th>
+                            <th class="column-header">J</th>
+                            <th class="column-header">K</th>
+                            <th class="column-header">L</th>
+                            <th class="column-header">M</th>
+                            <th class="column-header">N</th>
+                            <th class="column-header">O</th>
+                            <th class="column-header">P</th>
+                            <th class="column-header">Q</th>
+                            <th class="column-header">R</th>
+                            <th class="column-header">S</th>
+                            <th class="column-header">T</th>
+                            <th class="column-header">U</th>
+                            <th class="column-header">V</th>
+                            <th class="column-header">W</th>
+                            <th class="column-header">X</th>
+                            <th class="column-header">Y</th>
+                            <th class="column-header">Z</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="selected-row">
-                            <td class="row-num">1</td>
-                            <td class="selected-cell"><div class="cell-content">DB_9921</div></td>
-                            <td><div class="cell-content">John Doe</div></td>
-                            <td><div class="cell-content"><span class="badge active">Verified</span></div></td>
-                            <td><div class="cell-content">2026-03-13</div></td>
-                            <td><div class="cell-content">Technical</div></td>
-                            <td></td>
+                        <tr>
+                            <td class="row-number">1</td>
+                            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
                         </tr>
-                        <tr><td class="row-num">2</td><td><div class="cell-content">DB_9922</div></td><td><div class="cell-content">Jane Smith</div></td><td><div class="cell-content"><span class="badge active">Live</span></div></td><td><div class="cell-content">2026-03-12</div></td><td><div class="cell-content">Marketing</div></td><td></td></tr>
-                        <tr><td class="row-num">3</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-                        <tr><td class="row-num">4</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
                     </tbody>
                 </table>
+            </section>
+        </main>
+    </div>
+</body> 
+
+<script>
+    // SELECTORS
+    const gridWrapper = document.querySelector('.spreadsheet-grid-wrapper');
+    const topNav = document.getElementById('spreadsheetNav');
+    const tableNameInput = document.getElementById('tableNameInput');
+    const sidebarNav = document.querySelector('.sidebar-spreadsheet-nav');
+    const addTableBtn = document.querySelector('.add-table-btn');
+    const trashList = document.getElementById('trashList');
+    const accountMenu = document.getElementById('accountDropdown');
+
+    // VIEW MANAGEMENT LOGIC
+    // This handles the "Switching" only when a table is clicked
+    sidebarNav.addEventListener('click', (e) => {
+        const navItem = e.target.closest('.nav-item');
+        if (!navItem) return;
+
+        // Check if the item belongs to the "Tables" section
+        const isTable = navItem.closest('.nav-item-wrapper') || navItem.parentElement.id === 'tablesContainer';
+        
+        // Check if it's a "Workspace" item (like Settings)
+        const isWorkspace = !isTable;
+
+        // Update Active UI
+        document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+        navItem.classList.add('active');
+
+        if (isTable) {
+            // Update Navbar and show Grid
+            tableNameInput.value = navItem.textContent;
+            gridWrapper.style.display = 'block'; // Show spreadsheet
+            // loadTableData(navItem.textContent); // loader logic here for backend
+        } else {
+            // Workspace items (Settings, etc.)
+            tableNameInput.value = navItem.textContent; 
+            gridWrapper.style.display = 'none'; 
+            console.log("Switching to " + navItem.textContent + " view...");
+        }
+    });
+
+    // TABLE NAME SYNC (Renaming)
+    tableNameInput.addEventListener('input', (e) => {
+        const sidebarActiveItem = document.querySelector('.sidebar-spreadsheet-nav .nav-item.active');
+        // Only allow sync if the active item is a Table (has an options button)
+        if (sidebarActiveItem && sidebarActiveItem.closest('.nav-item-wrapper')) {
+            sidebarActiveItem.textContent = e.target.value || "Untitled Table";
+        }
+    });
+
+    tableNameInput.addEventListener('click', () => tableNameInput.select());
+
+    // ADD NEW TABLE (Wrapper Version Only)
+    addTableBtn.addEventListener('click', () => {
+        document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+
+        const wrapper = document.createElement('div');
+        wrapper.className = "nav-item-wrapper";
+        wrapper.innerHTML = `
+            <a href="#" class="nav-item active">Untitled_Table</a>
+            <button class="table-options-btn">⋮</button>
+            <div class="table-options-menu">
+                <button class="delete-table-btn">Delete Table</button>
             </div>
-        </div>
-    </main>
-</body>
+        `;
+
+        sidebarNav.insertBefore(wrapper, addTableBtn);
+        tableNameInput.value = "Untitled_Table";
+        gridWrapper.style.display = 'block';
+        tableNameInput.focus();
+        tableNameInput.select();
+    });
+
+    // DELETE & TRASH LOGIC
+    document.addEventListener('click', (e) => {
+        // Dropdown Toggles (Column and Table options)
+        if (e.target.classList.contains('table-options-btn') || e.target.classList.contains('col-dropdown-btn')) {
+            e.stopPropagation();
+            const menu = e.target.nextElementSibling;
+            const isShown = menu.classList.contains('show');
+            document.querySelectorAll('.table-options-menu, .col-menu').forEach(m => m.classList.remove('show'));
+            if (!isShown) menu.classList.add('show');
+        } else {
+            document.querySelectorAll('.table-options-menu, .col-menu, .popup-menu').forEach(m => m.classList.remove('show'));
+        }
+        
+        // Move to Trash
+        if (e.target.classList.contains('delete-table-btn')) {
+            const wrapper = e.target.closest('.nav-item-wrapper');
+            const tableName = wrapper.querySelector('.nav-item').textContent;
+            
+            const emptyMsg = trashList.querySelector('.empty-trash-msg');
+            if (emptyMsg) emptyMsg.style.display = 'none';
+
+            const trashItem = document.createElement('div');
+            trashItem.className = 'trash-item';
+            trashItem.innerHTML = `<span>${tableName}</span><div class="trash-actions">
+                <button class="restore-btn">↺</button><button class="permanent-delete-btn">✕</button></div>`;
+
+            trashList.appendChild(trashItem);
+            wrapper.remove();
+            if (tableNameInput.value === tableName) tableNameInput.value = "Select a table";
+        }
+
+        // Restore Table
+        if (e.target.classList.contains('restore-btn')) {
+            const trashItem = e.target.closest('.trash-item');
+            const tableName = trashItem.querySelector('span').textContent;
+            // Logic to recreate the wrapper and insert into sidebarNav...
+            trashItem.remove();
+            checkTrashEmpty();
+        }
+    });
+
+    // UTILITIES (Scroll, Account, Grid Generation)
+    gridWrapper.addEventListener('scroll', () => {
+        topNav.style.boxShadow = gridWrapper.scrollTop > 10 ? '0 4px 6px -1px rgba(0, 0, 0, 0.1)' : 'none';
+    });
+
+    document.getElementById('accountDropdownTrigger').addEventListener('click', (e) => {
+        e.stopPropagation();
+        accountMenu.classList.toggle('show');
+    });
+
+    function generateGridRows(rowCount) {
+        const tbody = document.querySelector('.table-view tbody');
+        tbody.innerHTML = '';
+        for (let i = 1; i <= rowCount; i++) {
+            const row = document.createElement('tr');
+            let rowHTML = `<td class="row-number">${i}</td>`;
+            for (let j = 0; j < 26; j++) rowHTML += `<td contenteditable="true" class="data-cell"></td>`;
+            row.innerHTML = rowHTML;
+            tbody.appendChild(row);
+        }
+    }
+
+    // Initialize
+    generateGridRows(50);
+    function checkTrashEmpty() {
+        if (trashList.querySelectorAll('.trash-item').length === 0) trashList.querySelector('.empty-trash-msg').style.display = 'block';
+    }
+</script>
+
 </html>

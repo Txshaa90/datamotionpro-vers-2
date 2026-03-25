@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="./src/output.css">
+</head>
+<body>
+    <main class="settings-main">
+        <section class="user-banner">
+            <div class="banner-content">
+                <div class="avatar-large">JD</div>
+                <div class="user-info">
+                    <h1>John Doe</h1>
+                    <p>john.doe@company.com • Professional Plan</p>
+                </div>
+                <button class="edit-banner-btn">Change Cover</button>
+            </div>
+        </section>
+
+        <div class="settings-container">
+            <section class="settings-section">
+                <div class="section-header">
+                    <h2>Account Information</h2>
+                    <p>Update your personal details and how we contact you.</p>
+                </div>
+                <form class="settings-form">
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label>Full Name</label>
+                            <input type="text" value="John Doe">
+                        </div>
+                        <div class="input-group">
+                            <label>Email Address</label>
+                            <input type="email" value="john.doe@company.com">
+                        </div>
+                    </div>
+                    <button type="submit" class="save-btn">Save Changes</button>
+                </form>
+            </section>
+
+            <section class="settings-section">
+                <div class="section-header">
+                    <h2>Security & Password</h2>
+                    <p>Manage your password and account security preferences.</p>
+                </div>
+                <div class="security-list">
+                    <div class="security-item">
+                        <div>
+                            <strong>Change Password</strong>
+                            <p>It's a good idea to use a strong password that you're not using elsewhere.</p>
+                        </div>
+                        <button class="outline-btn">Update</button>
+                    </div>
+                    <hr>
+                    <div class="security-item">
+                        <div>
+                            <strong>Two-Factor Authentication</strong>
+                            <p>Add an extra layer of security to your account.</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </section>
+
+            <section class="settings-section">
+                <div class="section-header">
+                    <h2>Appearance</h2>
+                    <p>Customize how DataMotionProV2 looks on your screen.</p>
+                </div>
+                <div class="security-item">
+                    <div>
+                        <strong>Dark Mode</strong>
+                        <p>Switch between light and dark themes for better visibility.</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="themeToggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </section>
+        </div>
+    </main>
+</body>
+
+<script>
+    const themeToggle = document.getElementById('themeToggle');
+    const body = document.body;
+
+   // Check for saved theme preference on load
+    const currentTheme = localStorage.getItem('theme');
+    if (currentTheme === 'dark') {
+        body.classList.add('dark-theme');
+        themeToggle.checked = true;
+    }
+
+    // Checks for the toggle click
+    themeToggle.addEventListener('change', () => {
+        if (themeToggle.checked) {
+            body.classList.add('dark-theme');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            body.classList.remove('dark-theme');
+            localStorage.setItem('theme', 'light');
+        }
+    });
+</script>
+
+</html>
