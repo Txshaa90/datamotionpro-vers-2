@@ -1317,9 +1317,138 @@ input:checked + .slider:before {
     font-size: 0.95rem;
 }
 
+.action-btns {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.edit-btn, .del-btn {
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid #e2e8f0;
+    background: white;
+    transition: all 0.2s;
+}
+
+.edit-btn { color: #2563eb; }
+.edit-btn:hover { background: #eff6ff; border-color: #2563eb; }
+
+.del-btn { color: #ef4444; }
+.del-btn:hover { background: #fef2f2; border-color: #ef4444; }
+
+/* Keep the folder icon blue to match your theme */
+.db-folder-row svg {
+    transition: transform 0.2s;
+}
+
+.db-folder-row:hover svg {
+    transform: scale(1.1);
+}
+
+.db-folder-row {
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.db-folder-row:hover {
+    background-color: #f8fafc;
+}
+
+/* Ensure the Stats Grid reflects the blue theme */
+.stat-card .stat-value {
+    color: #2563eb;
+}
+
 /* Ensure the table wrapper can be toggled */
 .table-wrapper {
     width: 100%;
+}
+
+/* Modal Styling here */
+/* Modal Overlay */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(15, 23, 42, 0.7); 
+    backdrop-filter: blur(4px);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: white;
+    width: 90%;
+    max-width: 650px;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.modal-subtext {
+    color: #64748b;
+    font-size: 0.9rem;
+    margin-bottom: 24px;
+}
+
+/* Selection Grid */
+.selection-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.option-card {
+    border: 2px solid #f1f5f9;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.option-card:hover {
+    border-color: #2563eb;
+    background: #f8fafc;
+    transform: translateY(-4px);
+}
+
+.option-icon { font-size: 2rem; margin-bottom: 12px; }
+.option-card h3 { font-size: 1rem; color: #1e293b; margin-bottom: 8px; }
+.option-card p { font-size: 0.75rem; color: #64748b; }
+
+.option-icon {
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #64748b;
+    transition: color 0.2s ease;
+}
+
+.option-card:hover .option-icon {
+    color: #2563eb;
+}
+
+.option-icon svg {
+    stroke: currentColor;
+}
+
+.close-modal {
+    background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #94a3b8;
 }
 
 /* Put spreadsheet-view.html CSS stuff here for now */
@@ -1451,8 +1580,10 @@ input:checked + .slider:before {
 
 .save-status {
     font-size: 0.75rem;
-    color: #94a3b8;
-    white-space: nowrap;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    padding: 2px 8px;
+    border-radius: 4px;
 }
 
 .spreadsheet-menu {
@@ -1696,6 +1827,22 @@ input:checked + .slider:before {
     background: #fef2f2;
 }
 
+.rename-table-btn {
+    width: 100%;
+    text-align: left;
+    padding: 10px 14px;
+    background: none;
+    border: none;
+    color: #2563eb;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.rename-table-btn:hover {
+    background: #f2f6fe;
+}
+
 /* Trash Menu */
 
 .trash-container {
@@ -1769,6 +1916,50 @@ input:checked + .slider:before {
     font-weight: 600;
     z-index: 20; 
     text-align: center;
+}
+
+/* Column Header Button */
+.add-col-header {
+    background-color: #f8fafc;
+    color: #94a3b8;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+    border: 1px solid #e2e8f0;
+    transition: all 0.2s;
+    min-width: 40px !important;
+}
+
+.add-col-header:hover {
+    background-color: #eff6ff;
+    color: #2563eb;
+}
+
+/* Row Footer Button */
+.add-row-cell {
+    padding: 0 !important;
+    border: none !important;
+}
+
+.add-row-btn {
+    width: 100%;
+    height: 35px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-top: none;
+    color: #64748b;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-align: left;
+    padding-left: 15px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.add-row-btn:hover {
+    background-color: #f8fafc;
+    color: #2563eb;
 }
 
 /* STICKY ROW NUMBERS (1-10) */
@@ -1882,6 +2073,11 @@ input:checked + .slider:before {
 .col-menu button:hover {
     background-color: #f1f5f9;
     color: #2563eb;
+}
+
+.col-menu button[onclick^="deleteColumn"]:hover {
+    background-color: #fef2f2 !important;
+    color: #ef4444 !important;
 }
 
 /* Type indicator in header */

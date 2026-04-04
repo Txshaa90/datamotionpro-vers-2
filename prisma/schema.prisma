@@ -5,6 +5,8 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  // To direct a db:push onto the Supabase client
+  directUrl = env("DIRECT_URL")
 }
 
 model User {

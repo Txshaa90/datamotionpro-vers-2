@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spreadsheet View</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="./src/output.css">
+</head>
+<body class="spreadsheet-view-body">
+    <div class="spreadsheet-layout">
+        <aside class="sidebar-spreadsheet">
+            <div class="sidebar-header">
+                <a href="dashboard.html" class="back-btn">←</a>
+                <span class="database-name">Inventory_2026</span>
+            </div>
+            
+            <nav class="sidebar-spreadsheet-nav">
+                <div class="nav-divider"></div>
+                
+
+                <div class="nav-label">Workspace</div>
+                    <a href="notifications.html" target="_blank" class="nav-item">Notifications</a>
+                    <a href="settings.html" target="_blank" class="nav-item">Settings</a>
+
+                    <div class="nav-divider"></div>
+
+                    <div class="nav-label">Tables</div>
+                    <div id="dynamicTablesList">
+                        </div>
+                    <button class="add-table-btn" onclick="addNewTableToDatabase()">+ Add New Table</button>
+
+                <div class="nav-label">Trash</div>
+                <div id="trashList" class="trash-container">
+                    <p class="empty-trash-msg">Trash is empty</p>
+                </div>
+        
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="dropdown-wrapper"> <button class="user-pill" id="accountDropdownTrigger">
+                        <div class="avatar-sm">JD</div>
+                        <span>John Doe</span>
+                    </button>
+
+                    <div class="popup-menu up" id="accountDropdown">
+                        <a href="settings.html" class="dropdown-item">Settings</a>
+                        <hr>
+                        <a href="login-page.html" class="dropdown-item logout">Log out</a>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content-spreadsheet">
+            <nav class="top-nav-spreadsheet" id="spreadsheetNav">
+                <div class="nav-left">
+                    <div class="table-title-group">
+                        <input type="text" value="Main_Inventory" class="table-name-input" id="tableNameInput">
+                        <span class="save-status">Saved</span>
+                        
+                        <div class="collaborator-stack">
+                            <div class="avatar-xs" style="background: #f59e0b;">AM</div>
+                            <div class="avatar-xs" style="background: #10b981;">TL</div>
+                            <div class="avatar-xs" style="background: #6366f1;">+2</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="spreadsheet-menu">
+                    <div class="action-group">
+                        <button class="primary-tool-btn" onclick="saveTableData()" style="background: #10b981;">Save Changes</button>
+                    </div>
+                    <div class="v-separator"></div>
+                    <div class="action-group">
+                        <button class="icon-tool-btn" title="Undo" onclick="undo()">↺</button>
+                        <button class="icon-tool-btn" title="Redo" onclick="redo()">↻</button>
+                    </div>
+                    <div class="v-separator"></div>
+                    <div class="action-group">
+                        <button class="tool-btn">Search</button>
+                        <button class="tool-btn">Filter</button>
+                        <button class="tool-btn">Sort</button>
+                        <button class="tool-btn">Color</button>
+                        <button class="tool-btn">Select</button>
+                        <button class="tool-btn">Import</button>
+                        <button class="tool-btn">Download</button>
+                    </div>
+                    <div class="v-separator"></div>
+                    <button class="primary-tool-btn">Connect API</button>
+                </div>
+            </nav>
+
+            <section class="spreadsheet-grid-wrapper">
+                <table class="table-view">
+                    <thead>
+                        <tr class="column-id">
+                            <th class="corner-header"></th>
+                            <th class="add-col-header" onclick="addNewColumn()">+</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        </tbody>
+                    <tfoot>
+                        <tr>
+                            <td class="row-number"></td>
+                            <td colspan="100" class="add-row-cell">
+                                <button class="add-row-btn" onclick="addNewRow()">+ New Row</button>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </section>
+
+            <section id="view-settings" class="settings-wrapper" style="display: none;">
+                <div class="settings-main">
+                    <div class="section-header">
+                        <h2>Account Information</h2>
+                        <p>Update your details here.</p>
+                    </div>
+                    </div>
+            </section>
+
+        </main>
+    </div>
+</body> 
+
+<script>
+    let undoStack = [];
+    let redoStack = [];
+    const MAX_HISTORY = 30; // Limits memory usage
+
+    function pushToHistory() {
+        // Get current state of headers and rows
+        const currentHeaders = Array.from(document.querySelectorAll('.col-label')).map(span => span.textContent);
+        const currentRows = Array.from(document.querySelectorAll('.table-view tbody tr')).map(tr => 
+            Array.from(tr.querySelectorAll('.data-cell')).map(td => td.innerText)
+        );
+
+        // Push to Undo Stack
+        undoStack.push({
+            headers: currentHeaders,
+            rows: currentRows
+        });
+
+        // Limit size
+        if (undoStack.length > MAX_HISTORY) undoStack.shift();
+
+        // Clear Redo stack whenever a new action is taken
+        redoStack = [];
+    }
+
+    function undo() {
+        if (undoStack.length === 0) return;
+
+        // Capture current state for Redo
+        const currentHeaders = Array.from(document.querySelectorAll('.col-label')).map(span => span.textContent);
+        const currentRows = Array.from(document.querySelectorAll('.table-view tbody tr')).map(tr => 
+            Array.from(tr.querySelectorAll('.data-cell')).map(td => td.innerText)
+        );
+        redoStack.push({ headers: currentHeaders, rows: currentRows });
+
+        // Pop previous state
+        const previousState = undoStack.pop();
+
+        // Restore
+        renderDataToGrid(previousState);
+        console.log("Undo performed");
+    }
+
+    function redo() {
+        if (redoStack.length === 0) return;
+
+        // Push current back to Undo
+        const currentHeaders = Array.from(document.querySelectorAll('.col-label')).map(span => span.textContent);
+        const currentRows = Array.from(document.querySelectorAll('.table-view tbody tr')).map(tr => 
+            Array.from(tr.querySelectorAll('.data-cell')).map(td => td.innerText)
+        );
+        undoStack.push({ headers: currentHeaders, rows: currentRows });
+
+        // Pop state from Redo
+        const nextState = redoStack.pop();
+
+        // Restore
+        renderDataToGrid(nextState);
+        console.log("Redo performed");
+    }
+
+    // STATE & SELECTORS
+    const params = new URLSearchParams(window.location.search);
+    const activeDbName = params.get('db');
+    let activeTableIndex = 0; // For multi-sheet support
+
+    const tableNameInput = document.getElementById('tableNameInput');
+    const dbLabel = document.querySelector('.database-name');
+
+    // CORE RENDERING ENGINE
+    function getColLabel(n) {
+        let label = "";
+        while (n >= 0) {
+            label = String.fromCharCode((n % 26) + 65) + label;
+            n = Math.floor(n / 26) - 1;
+        }
+        return label;
+    }
+
+    function renderDataToGrid(tableData) {
+        const theadRow = document.querySelector('.table-view thead tr');
+        const tbody = document.querySelector('.table-view tbody');
+        const addColBtn = document.querySelector('.add-col-header');
+
+        tbody.innerHTML = '';
+        document.querySelectorAll('.column-header').forEach(h => h.remove());
+
+        const rows = tableData.rows || [];
+        const headers = tableData.headers || [];
+        const colCount = Math.max(headers.length, (rows[0] ? rows[0].length : 26));
+
+        // Build Headers
+        for (let i = 0; i < colCount; i++) {
+            const label = headers[i] || getColLabel(i);
+            const th = document.createElement('th');
+            th.className = 'column-header';
+            th.innerHTML = `
+                <div class="th-container" data-col-index="${i}">
+                    <span class="col-type-icon">Abc</span> 
+                    <span class="col-label">${label}</span>
+                    <button class="col-dropdown-btn">▾</button>
+                    <div class="col-menu">
+                        <button onclick="setColumnType(${i}, 'text')">Text</button>
+                        <button onclick="setColumnType(${i}, 'number')">Number</button>
+                        <button onclick="setColumnType(${i}, 'boolean')">Boolean</button>
+                        <hr>
+                        <button onclick="renameColumn(${i})">Rename Column</button>
+                        <button onclick="deleteColumn(${i})" style="color:red">Delete Column</button>
+                    </div>
+                </div>`;
+            theadRow.insertBefore(th, addColBtn);
+        }
+
+        // Build Rows
+        const rowDisplayCount = Math.max(rows.length, 50);
+        for (let i = 0; i < rowDisplayCount; i++) {
+            const row = document.createElement('tr');
+            let rowHTML = `<td class="row-number">${i + 1}</td>`;
+            const rowData = rows[i] || [];
+            for (let j = 0; j < colCount; j++) {
+                const cellValue = rowData[j] || "";
+                rowHTML += `<td contenteditable="true" class="data-cell">${cellValue}</td>`;
+            }
+            row.innerHTML = rowHTML;
+            tbody.appendChild(row);
+        }
+    }
+
+    // PERSISTENCE
+    function saveTableData() {
+        const saveStatus = document.querySelector('.save-status');
+        saveStatus.textContent = "Saving...";
+        saveStatus.style.color = "#f59e0b";
+
+        const allDbs = JSON.parse(localStorage.getItem('userDatabases')) || [];
+        const dbIndex = allDbs.findIndex(db => db.name === activeDbName);
+        if (dbIndex === -1) return;
+
+        const headers = [];
+        document.querySelectorAll('.col-label').forEach(span => headers.push(span.textContent));
+
+        const rows = [];
+        document.querySelectorAll('.table-view tbody tr').forEach(tr => {
+            const rowData = [];
+            tr.querySelectorAll('.data-cell').forEach(td => rowData.push(td.innerText));
+            rows.push(rowData);
+        });
+
+        allDbs[dbIndex].tables[activeTableIndex].headers = headers;
+        allDbs[dbIndex].tables[activeTableIndex].rows = rows;
+        localStorage.setItem('userDatabases', JSON.stringify(allDbs));
+
+        setTimeout(() => {
+            saveStatus.textContent = "Saved";
+            saveStatus.style.color = "#10b981";
+        }, 600);
+    }
+
+    // SIDEBAR LOGIC
+    function renderSidebarTables() {
+        const allDbs = JSON.parse(localStorage.getItem('userDatabases')) || [];
+        const currentDb = allDbs.find(db => db.name === activeDbName);
+        const container = document.getElementById('dynamicTablesList');
+        if (!currentDb) return;
+
+        container.innerHTML = currentDb.tables.map((t, i) => `
+            <div class="nav-item-wrapper">
+                <a href="#" class="nav-item ${i === activeTableIndex ? 'active' : ''}" 
+                onclick="switchTable(${i})">${t.name}</a>
+                <button class="table-options-btn" onclick="showTableOptions(event, ${i})">⋮</button>
+                <div class="table-options-menu" id="menu-${i}">
+                    <button class="rename-table-btn" onclick="renameTable(${i})">Rename</button>
+                    <button class="delete-table-btn" onclick="deleteTable(${i})" style="color:red">Delete</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function switchTable(index) {
+        activeTableIndex = index;
+        const allDbs = JSON.parse(localStorage.getItem('userDatabases')) || [];
+        const currentDb = allDbs.find(db => db.name === activeDbName);
+        
+        tableNameInput.value = currentDb.tables[index].name;
+        renderDataToGrid(currentDb.tables[index]);
+        renderSidebarTables();
+    }
+
+    function addNewTableToDatabase() {
+        const name = prompt("New Table Name:");
+        if (!name) return;
+        const allDbs = JSON.parse(localStorage.getItem('userDatabases')) || [];
+        const dbIndex = allDbs.findIndex(db => db.name === activeDbName);
+        allDbs[dbIndex].tables.push({ name: name, rows: [], headers: [] });
+        localStorage.setItem('userDatabases', JSON.stringify(allDbs));
+        renderSidebarTables();
+        switchTable(allDbs[dbIndex].tables.length - 1);
+    }
+
+    function showTableOptions(event, index) {
+        event.stopPropagation();
+        document.querySelectorAll('.table-options-menu').forEach(m => m.classList.remove('show'));
+        document.getElementById(`menu-${index}`).classList.add('show');
+    }
+
+    function renameTable(index) {
+        const allDbs = JSON.parse(localStorage.getItem('userDatabases')) || [];
+        const dbIndex = allDbs.findIndex(db => db.name === activeDbName);
+        const newName = prompt("Rename table to:", allDbs[dbIndex].tables[index].name);
+        if (newName) {
+            allDbs[dbIndex].tables[index].name = newName;
+            localStorage.setItem('userDatabases', JSON.stringify(allDbs));
+            renderSidebarTables();
+            if (index === activeTableIndex) tableNameInput.value = newName;
+        }
+    }
+
+    // GRID ACTIONS
+    function addNewRow() {
+        pushToHistory();
+        const tbody = document.querySelector('.table-view tbody');
+        const colCount = document.querySelectorAll('.column-header').length;
+        const row = document.createElement('tr');
+        let rowHTML = `<td class="row-number">${tbody.children.length + 1}</td>`;
+        for (let j = 0; j < colCount; j++) rowHTML += `<td contenteditable="true" class="data-cell"></td>`;
+        row.innerHTML = rowHTML;
+        tbody.appendChild(row);
+        row.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function addNewColumn() {
+        const allDbs = JSON.parse(localStorage.getItem('userDatabases')) || [];
+        const dbIndex = allDbs.findIndex(db => db.name === activeDbName);
+        const table = allDbs[dbIndex].tables[activeTableIndex];
+        if(!table.headers) table.headers = [];
+        
+        // Add current row count back to state before refreshing
+        const rows = [];
+        document.querySelectorAll('.table-view tbody tr').forEach(tr => {
+            const rowData = [];
+            tr.querySelectorAll('.data-cell').forEach(td => rowData.push(td.innerText));
+            rows.push(rowData);
+        });
+        table.rows = rows;
+        table.headers.push(getColLabel(document.querySelectorAll('.column-header').length));
+        
+        localStorage.setItem('userDatabases', JSON.stringify(allDbs));
+        location.reload(); 
+    }
+
+    function renameColumn(index) {
+        pushToHistory();
+        const labelSpan = document.querySelector(`.th-container[data-col-index="${index}"] .col-label`);
+        const newName = prompt("Column Name:", labelSpan.textContent);
+        if (newName) {
+            labelSpan.textContent = newName;
+            saveTableData();
+        }
+    }
+
+    function deleteTable(index) {
+        const allDbs = JSON.parse(localStorage.getItem('userDatabases')) || [];
+        const dbIndex = allDbs.findIndex(db => db.name === activeDbName);
+        const db = allDbs[dbIndex];
+
+        // Initialize trash array if it doesn't exist
+        if (!db.trash) db.trash = [];
+
+        // Move from tables to trash
+        const removedTable = db.tables.splice(index, 1)[0];
+        db.trash.push(removedTable);
+
+        localStorage.setItem('userDatabases', JSON.stringify(allDbs));
+        
+        // Refresh UI
+        renderSidebarTables();
+        renderTrashList();
+        
+        // If we deleted the table we were looking at, switch to the first available table
+        if (index === activeTableIndex) {
+            switchTable(0);
+        }
+    }
+
+    function renderTrashList() {
+        const allDbs = JSON.parse(localStorage.getItem('userDatabases')) || [];
+        const db = allDbs.find(db => db.name === activeDbName);
+        const trashContainer = document.getElementById('trashList');
+
+        if (!db.trash || db.trash.length === 0) {
+            trashContainer.innerHTML = '<p class="empty-trash-msg">Trash is empty</p>';
+            return;
+        }
+
+        trashContainer.innerHTML = db.trash.map((t, i) => `
+            <div class="trash-item">
+                <span>${t.name}</span>
+                <div class="trash-actions">
+                    <button class="restore-btn" title="Restore" onclick="restoreTable(${i})">↺</button>
+                    <button class="permanent-delete-btn" title="Delete Forever" onclick="permanentlyDeleteTable(${i})">✕</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function restoreTable(index) {
+        const allDbs = JSON.parse(localStorage.getItem('userDatabases')) || [];
+        const dbIndex = allDbs.findIndex(db => db.name === activeDbName);
+        const db = allDbs[dbIndex];
+
+        const restoredTable = db.trash.splice(index, 1)[0];
+        db.tables.push(restoredTable);
+
+        localStorage.setItem('userDatabases', JSON.stringify(allDbs));
+        renderSidebarTables();
+        renderTrashList();
+    }
+
+    function permanentlyDeleteTable(index) {
+        if (!confirm("Delete this table forever? This cannot be undone.")) return;
+
+        const allDbs = JSON.parse(localStorage.getItem('userDatabases')) || [];
+        const dbIndex = allDbs.findIndex(db => db.name === activeDbName);
+        
+        allDbs[dbIndex].trash.splice(index, 1);
+        
+        localStorage.setItem('userDatabases', JSON.stringify(allDbs));
+        renderTrashList();
+    }
+
+    // INITIALIZE
+     function initializeView() {
+        const allDbs = JSON.parse(localStorage.getItem('userDatabases')) || [];
+        const currentDb = allDbs.find(db => db.name === activeDbName);
+        if (currentDb) {
+            dbLabel.textContent = currentDb.name;
+            renderSidebarTables();
+            renderTrashList();
+            switchTable(0);
+        }
+    }
+
+    document.addEventListener('click', (e) => {
+        if (!e.target.classList.contains('table-options-btn') && !e.target.classList.contains('col-dropdown-btn')) {
+            document.querySelectorAll('.col-menu, .table-options-menu').forEach(m => m.classList.remove('show'));
+        }
+        if (e.target.classList.contains('col-dropdown-btn')) {
+            e.stopPropagation();
+            e.target.nextElementSibling.classList.add('show');
+        }
+    });
+
+    document.addEventListener('focusin', (e) => {
+        if (e.target.classList.contains('data-cell')) {
+            pushToHistory(); 
+        }
+    });
+
+    window.addEventListener('keydown', (e) => {
+        // Check if Control (Windows) or Command (Mac) is pressed
+        const isModifierPressed = e.ctrlKey || e.metaKey;
+
+        if (isModifierPressed) {
+            // UNDO: Ctrl + Z
+            if (e.key.toLowerCase() === 'z' && !e.shiftKey) {
+                e.preventDefault(); // Stop browser's default undo
+                undo();
+            }
+
+            // REDO: Ctrl + Y  OR  Ctrl + Shift + Z
+            if (e.key.toLowerCase() === 'y' || (e.key.toLowerCase() === 'z' && e.shiftKey)) {
+                e.preventDefault(); // Stop browser's default redo
+                redo();
+            }
+
+            // SAVE: Ctrl + S
+            if (e.key.toLowerCase() === 's') {
+                e.preventDefault();
+                saveTableData();
+            }
+        }
+    });
+
+    initializeView();
+</script>
+
+</html>

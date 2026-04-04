@@ -1,33 +1,29 @@
 import Stripe from 'stripe'
 
-if (!process.env.STRIPE_SECRET_KEY) {
-  throw new Error('STRIPE_SECRET_KEY is not defined')
-}
-
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: '2024-06-20',
-  typescript: true,
-})
+// Check if the secret key exists before initializing.
+// If it's missing, we set stripe to null instead of throwing an error.
+export const stripe = process.env.STRIPE_SECRET_KEY
+  ? new Stripe(process.env.STRIPE_SECRET_KEY, {
+      apiVersion: '2024-06-20', 
+    })
+  : null
 
 export const PLANS = {
   FREE: {
-    name: 'Free',
+    name: 'Starter',
     price: 0,
-    limits: {
-      workspaces: 1,
-      tables: 3,
-      rowsPerTable: 100,
-    },
+    priceId: null, // No priceId for free plan
   },
   BASIC: {
     name: 'Basic',
     price: 9,
     priceId: process.env.STRIPE_PRICE_ID_BASIC,
     limits: {
-      workspaces: 5,
-      tables: 20,
-      rowsPerTable: 10000,
+      workspaces: 1,
+      tables: 1,
+      rowsPerTable: 100,
     },
+
   },
   PRO: {
     name: 'Pro',
@@ -39,4 +35,6 @@ export const PLANS = {
       rowsPerTable: -1,
     },
   },
-}
+} as const;
+
+export type PlanType = keyof typeof PLANS;

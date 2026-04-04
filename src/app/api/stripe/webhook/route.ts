@@ -5,6 +5,9 @@ import { prisma } from '@/lib/prisma'
 import Stripe from 'stripe'
 
 export async function POST(req: Request) {
+  if (!stripe) {
+    return NextResponse.json({ error: 'Stripe not configured' }, { status: 503 })
+  }
   const body = await req.text()
   const signature = headers().get('stripe-signature')
 
@@ -34,34 +37,38 @@ export async function POST(req: Request) {
   try {
     switch (event.type) {
       case 'checkout.session.completed': {
-        const session = event.data.object as Stripe.Checkout.Session
-        const userId = session.metadata?.userId
+      const session = event.data.object as Stripe.Checkout.Session
+      const userId = session.metadata?.userId
 
-        if (!userId) {
-          throw new Error('No userId in metadata')
-        }
-
-        const subscription = await stripe.subscriptions.retrieve(
-          session.subscription as string
-        )
-
-        await prisma.subscription.update({
-          where: { userId },
-          data: {
-            stripeSubscriptionId: subscription.id,
-            stripePriceId: subscription.items.data[0].price.id,
-            stripeCurrentPeriodEnd: new Date(
-              subscription.current_period_end * 1000
-            ),
-            status: subscription.status,
-            plan: subscription.items.data[0].price.id ===
-              process.env.STRIPE_PRICE_ID_BASIC
-              ? 'basic'
-              : 'pro',
-          },
-        })
-        break
+      if (!userId) {
+        throw new Error('No userId in metadata')
       }
+
+      // Fetch the actual subscription object from Stripe using the ID
+      const subscription = await stripe.subscriptions.retrieve(
+        session.subscription as string
+      )
+
+      await prisma.subscription.upsert({
+        where: { userId },
+        create: {
+          userId,
+          stripeSubscriptionId: subscription.id,
+          stripeCustomerId: session.customer as string,
+          stripePriceId: subscription.items.data[0].price.id,
+          status: subscription.status,
+          plan: subscription.items.data[0].price.id === process.env.STRIPE_PRICE_ID_BASIC ? 'basic' : 'pro',
+        },
+        update: {
+          stripeSubscriptionId: subscription.id,
+          stripePriceId: subscription.items.data[0].price.id,
+          stripeCurrentPeriodEnd: new Date(subscription.current_period_end * 1000),
+          status: subscription.status,
+          plan: subscription.items.data[0].price.id === process.env.STRIPE_PRICE_ID_BASIC ? 'basic' : 'pro',
+        },
+      })
+      break
+    }
 
       case 'customer.subscription.updated': {
         const subscription = event.data.object as Stripe.Subscription

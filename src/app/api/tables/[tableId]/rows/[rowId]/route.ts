@@ -39,6 +39,22 @@ export async function PUT(
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
+    // Verify if the rowId actually belongs to the tableId provided in the URL.
+    // This prevents a user from updating a row in Table B while using a Table A URL.
+    const rowExists = await prisma.row.findFirst({
+      where: {
+        id: params.rowId,
+        tableId: params.tableId, 
+      },
+    })
+
+    if (!rowExists) {
+      return NextResponse.json(
+        { error: 'Row not found or does not belong to this table' },
+        { status: 404 }
+      )
+    }
+
     const body = await req.json()
     const { cells } = updateRowSchema.parse(body)
 
@@ -123,9 +139,21 @@ export async function DELETE(
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
-    await prisma.row.delete({
-      where: { id: params.rowId },
+    // Use .deleteMany() which returns a 'count' of deleted records.
+    const { count } = await prisma.row.deleteMany({
+      where: {
+        id: params.rowId,
+        tableId: params.tableId, 
+      },
     })
+
+    // If count is 0, the row didn't exist or didn't belong to the tableId.
+    if (count === 0) {
+      return NextResponse.json(
+        { error: 'Row not found or does not belong to this table' },
+        { status: 404 }
+      )
+    }
 
     return NextResponse.json({ success: true })
   } catch (error) {

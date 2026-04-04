@@ -65,7 +65,7 @@ export async function GET(
         where: {
           tableId: params.tableId,
         },
-      }),
+      }),  
     ])
 
     const formattedRows = rows.map((row) => ({

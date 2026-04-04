@@ -2,6 +2,8 @@
 
 import Link from 'next/link'
 import { Database, Zap, Shield, Users, ArrowRight, CheckCircle, BarChart3, FileSpreadsheet } from 'lucide-react'
+import demoScreenshot from '@/assets/demo_screenshot.jpg';
+import Image from 'next/image'
 
 export default function HomePage() {
   return (
@@ -87,12 +89,14 @@ export default function HomePage() {
 
           {/* Hero Image Placeholder */}
           <div className="mt-20 max-w-5xl mx-auto">
-            <div className="bg-gradient-to-br from-blue-50 to-gray-100 rounded-2xl shadow-2xl border border-gray-200 p-8 aspect-video flex items-center justify-center">
-              <div className="text-center">
-                <FileSpreadsheet className="h-24 w-24 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-500 text-lg">Product Screenshot / Demo Video</p>
-                <p className="text-gray-400 text-sm mt-2">Interns: Add your design here</p>
-              </div>
+            <div className="bg-gradient-to-br from-blue-50 to-gray-100 rounded-2xl shadow-2xl border border-gray-200 p-8 aspect-video flex items-center justify-center relative overflow-hidden">
+              <Image
+                src={demoScreenshot}
+                alt="DataMotion Pro Dashboard Demo"
+                className="object-cover"
+                placeholder="blur"
+                fill 
+              />
             </div>
           </div>
         </div>
