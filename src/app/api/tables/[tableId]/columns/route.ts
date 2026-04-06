@@ -5,7 +5,7 @@ import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
 
 const columnSchema = z.object({
-  name: z.string().min(1),
+  name: z.string().min(1).max(255),
   type: z.enum(['text', 'number', 'date', 'boolean']).default('text'),
 })
 
@@ -25,18 +25,11 @@ export async function POST(
       include: {
         workspace: {
           include: {
-            members: {
-              where: {
-                userId: session.user.id,
-              },
-            },
+            members: { where: { userId: session.user.id } },
           },
         },
         columns: {
-          orderBy: {
-            order: 'desc',
-          },
-          take: 1,
+          orderBy: { order: 'desc' },
         },
       },
     })
@@ -48,13 +41,24 @@ export async function POST(
     const body = await req.json()
     const { name, type } = columnSchema.parse(body)
 
+    const duplicate = table.columns.find(
+      (col) => col.name.toLowerCase() === name.trim().toLowerCase()
+    )
+
+    if (duplicate) {
+      return NextResponse.json(
+        { error: `A column named "${name}" already exists in this table. Please choose a different name.` },
+        { status: 409 }
+      )
+    }
+
     const maxOrder = table.columns[0]?.order ?? -1
     const newOrder = maxOrder + 1
 
     const column = await prisma.column.create({
       data: {
         tableId: params.tableId,
-        name,
+        name: name.trim(),
         type,
         order: newOrder,
       },
@@ -68,10 +72,6 @@ export async function POST(
         { status: 400 }
       )
     }
-
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
